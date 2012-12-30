@@ -17,6 +17,7 @@ function FirstView() {
 	});
 	
 	var password = Ti.UI.createTextField({
+		passwordMask: true,
 		backgroundColor: '#FFFFFF',
 		borderColor: '#DFDFDF',
 		borderWidth: 2,
