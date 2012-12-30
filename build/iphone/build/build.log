@@ -5,7 +5,7 @@ reporting an issue to help us understand your environment, build settings
 and aid in debugging. Please attach this log to any issue that you report.
 ================================================================================
 
-Starting build at 12/30/12 19:21
+Starting build at 12/31/12 01:21
 
 Build details:
 
@@ -77,15 +77,3 @@ Generated the following stylecode code:
 	</dict>
 </plist>
 Finishing build
-
-Exception detected in script:
-Traceback (most recent call last):
-  File "/Users/skounis/Library/Application Support/Titanium/mobilesdk/osx/2.1.2.GA/iphone/builder.py", line 1411, in main
-    os.waitpid(sim.pid,0)
-  File "/Users/skounis/Library/Application Support/Titanium/mobilesdk/osx/2.1.2.GA/iphone/builder.py", line 1346, in handler
-    kill_simulator()
-  File "/Users/skounis/Library/Application Support/Titanium/mobilesdk/osx/2.1.2.GA/iphone/builder.py", line 77, in kill_simulator
-    run.run(['/usr/bin/killall',"iPhone Simulator"],True)
-  File "/Users/skounis/Library/Application Support/Titanium/mobilesdk/osx/2.1.2.GA/iphone/run.py", line 8, in run
-    sys.stdout.flush()
-IOError: [Errno 32] Broken pipe

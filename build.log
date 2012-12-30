@@ -1,0 +1,12 @@
+Logfile initialized
+[INFO] logfile = /Users/skounis/Documents/Titanium Studio Workspace/gauth/build.log
+[DEBUG] /Users/skounis/Library/Application Support/Titanium/mobilesdk/osx/2.1.2.GA/android/builder.py install gauth /Library/Titanium-SDKs /Users/skounis/Documents/Titanium Studio Workspace/gauth com.blogspot.skounis.ti.gauth 9
+[INFO] Titanium SDK version: 2.1.2 (08/24/12 14:46 ed7f777)
+[DEBUG] Waiting for device to be ready ...
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[ERROR] Timed out waiting for device to be ready, you may try reconnecting the USB cable

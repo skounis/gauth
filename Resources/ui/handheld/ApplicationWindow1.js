@@ -5,6 +5,7 @@ function ApplicationWindow() {
 		
 	//create component instance
 	var self = Ti.UI.createWindow({
+		title:'Simple',
 		backgroundColor:'#ffffff'
 	});
 		
@@ -28,7 +29,7 @@ function ApplicationWindow() {
 	    title: 'Login',
 	    style: Titanium.UI.iPhone.SystemButtonStyle.DONE,
 	});
-	
+		
 	var feeds = Titanium.UI.createButton({
 	    title: 'Get Feeds',
 	    style: Titanium.UI.iPhone.SystemButtonStyle.DONE,
@@ -97,7 +98,7 @@ function ApplicationWindow() {
 		
 		xhr.send();
 	});
-		
+	
 	self.add(toolbar);
 	
 	return self;
