@@ -3,7 +3,7 @@ function WebWindow(userCode, verificationUrl) {
 	//create component instance
 	var self = Ti.UI.createWindow({
 		title: 'code: ' + userCode,
-		backgroundColor:'orange'
+		backgroundColor:'#dfdfdf'
 	});
 	
 	var donebb = Titanium.UI.createButtonBar({

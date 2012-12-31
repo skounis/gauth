@@ -1,12 +1,14 @@
-//Application Window Component Constructor
 function ApplicationWindow2() {
-	//load component dependencies
-	//var FirstView = require('ui/common/FirstView');
+	// OAuth2 library and information
 	var OAuth2 = require('ui/common/OAUTH2');
-	this.device_code = '';
-	this.user_code = '';
-	this.verification_url = '';
-		
+	var oauth_info = [];
+	oauth_info.device_code = '';
+	oauth_info.user_code = '';
+	oauth_info.verification_url = '';
+	oauth_info.access_token = '';
+	oauth_info.token_type = '';
+	oauth_info.expires_in = '';
+	oauth_info.refresh_token = '';
 	
 	var WebWindow = require('ui/common/WebWindow');
 		
@@ -36,35 +38,51 @@ function ApplicationWindow2() {
 	
 	codeField.addEventListener('change', function(){
 		Ti.API.log("Navigate to the verification url...")
-		// webView.url = 'http://www.google.com/device';
 	})
 	
 	self.add(codeField);
-
-	var webView = Ti.UI.createWebView({
+	
+	var tokenLabel = Ti.UI.createLabel({
+		text:"Token:",
 		top: 68,
 		width: '100%',
-		bottom: 34
-	});
+		height: 34
+	})
 	
-	self.add(webView);
+	self.add(tokenLabel);
+	
+	var tokenField = Ti.UI.createTextArea({
+		top: 102,
+		width: '100%',
+		height: 68,
+		editable: false,
+		textAlign: 'center'
+	})	
+	
+	self.add(tokenField);
+	
 	
 	flexSpace = Titanium.UI.createButton({
 	    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
 	});
 	
 	var oauth2a = Titanium.UI.createButton({
-	    title: '1. Authenticate',
+	    title: '1. Auth',
 	    style: Titanium.UI.iPhone.SystemButtonStyle.DONE,
 	});
 		
 	var oauth2b = Titanium.UI.createButton({
-	    title: '2. Authorize',
+	    title: '2. Get token',
+	    style: Titanium.UI.iPhone.SystemButtonStyle.DONE,
+	});
+
+	var oauth2c = Titanium.UI.createButton({
+	    title: '3. Call API',
 	    style: Titanium.UI.iPhone.SystemButtonStyle.DONE,
 	});
 	
 	var toolbar = Titanium.UI.iOS.createToolbar({
-	    items:[oauth2a, flexSpace, oauth2b],
+	    items:[oauth2a, flexSpace, oauth2b, flexSpace, oauth2c],
 	    bottom:0,
 	    borderTop:true,
 	    borderBottom:false
@@ -74,48 +92,42 @@ function ApplicationWindow2() {
 	
 	var oa = new OAuth2();
 
-	var callback = function (r) {
-		alert('callback called' + r.user_code);
-		this.device_code = r.device_code;
-		this.user_code = r.user_code;
-		this.verification_url = r.verification_url;
+	var authCallback = function (r) {
+		Ti.API.log('ApplicationWidonw2 - auth callback called, user code: ' + r.user_code);
+		oauth_info.device_code = r.device_code;
+		oauth_info.user_code = r.user_code;
+		oauth_info.verification_url = r.verification_url;
 		codeField.value = r.user_code;
 		openWeb();
+	}
 
+	var tokenCallback = function (r) {
+		Ti.API.log('ApplicationWidonw2 - token callback called, token: ' + r.access_token);
+		oauth_info.access_token = r.access_token;
+		oauth_info.token_type = r.token_type;
+		oauth_info.expires_in = r.expires_in;
+		oauth_info.refresh_token = r.refresh_token;
+		tokenField.value = r.access_token;
 	}
 	
 	//Add behavior for UI
-
 	oauth2a.addEventListener('click', function(e){
-		oa.auth(callback);
+		oa.auth(authCallback);
 	});
 		
+	oauth2b.addEventListener('click', function(e){
+		oa.token(oauth_info,tokenCallback);
+	});
+	
 	self.add(toolbar);
 	
 	function openWeb(){
 		alert('open modal');
-		webWindow = new WebWindow(this.user_code, this.verification_url);
+		webWindow = new WebWindow(oauth_info.user_code, oauth_info.verification_url);
 		webWindow.open({modal:true});
-		/*
-		var w = Ti.UI.createWindow({
-			backgroundColor:'purple'
-		});
-		var b = Ti.UI.createButton({
-			title:'Close',
-			width:100,
-			height:30
-		});
-		b.addEventListener('click',function()
-		{
-			w.close();
-		});
-		w.add(b);
-		w.open({modal:true});
-		*/
 	}
 	
 	return self;
 }
 
-//make constructor function the public component interface
 module.exports = ApplicationWindow2;

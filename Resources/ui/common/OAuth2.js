@@ -29,6 +29,38 @@ function OAuth2() {
 		xhr.send();
 	}
 		
+	this.token = function(info, callback){
+		var xhr1 = Ti.Network.createHTTPClient();
+		var url = 'https://accounts.google.com/o/oauth2/token';
+
+		Ti.API.log("token call:" + url);
+
+		xhr1.open('POST', url);
+		xhr1.onload = function() {
+			Ti.API.log("onload response: " + xhr1.responseText);
+			
+			var response = JSON.parse(xhr1.responseText);
+			Ti.API.log("Access token ....: " + response.access_token);
+			Ti.API.log("Token type ......: " + response.token_type);
+			Ti.API.log("Expires in ......: " + response.expires_in);
+			Ti.API.log("Refresh token ...: " + response.refresh_token);
+			callback(response);
+		};
+		
+		xhr1.onerror = function(e) {
+        	Ti.API.log("on error response: " + xhr1.responseText + ' -- ' + e.error + " -- " + e);
+         	alert('An error occurred, check the log messages');
+		};
+		
+		xhr1.send({
+			'client_id' : this.CLIENT_ID,
+        	'client_secret' : this.CLIENT_SECRET,
+        	'code' : info.device_code,	
+        	'grant_type' : 'http://oauth.net/grant_type/device/1.0'
+		});
+		
+		Ti.API.log("XHR to string: " + xhr1.toString);
+	}
 }
 
 module.exports = OAuth2;
