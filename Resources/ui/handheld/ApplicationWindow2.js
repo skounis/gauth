@@ -10,6 +10,9 @@ function ApplicationWindow2() {
 	oauth_info.expires_in = '';
 	oauth_info.refresh_token = '';
 	
+	// Google APIs
+	var GoogleAPIs = require('ui/common/GoogleAPIs');
+	
 	var WebWindow = require('ui/common/WebWindow');
 		
 	//create component instance
@@ -110,6 +113,12 @@ function ApplicationWindow2() {
 		tokenField.value = r.access_token;
 	}
 	
+	var gapi = new GoogleAPIs();
+	
+	var gapiCallback = function (r) {
+		Ti.API.log('ApplicationWidonw2 - gapi callback called, user code: ' + r);
+	}
+	
 	//Add behavior for UI
 	oauth2a.addEventListener('click', function(e){
 		oa.auth(authCallback);
@@ -117,6 +126,10 @@ function ApplicationWindow2() {
 		
 	oauth2b.addEventListener('click', function(e){
 		oa.token(oauth_info,tokenCallback);
+	});
+	
+	oauth2c.addEventListener('click', function(e){
+		gapi.useinfo(oauth_info.access_token,gapiCallback);
 	});
 	
 	self.add(toolbar);
