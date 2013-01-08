@@ -37,8 +37,8 @@ if (Ti.version < 1.8 ) {
 			Window = require('ui/handheld/android/ApplicationWindow1');
 		}
 		else {
-			Window1 = require('ui/handheld/ApplicationWindow1');
-			Window2 = require('ui/handheld/ApplicationWindow2');
+			Window1 = require('ui/handheld/SimpleApplicationWindow');
+			Window2 = require('ui/handheld/OAuth2ApplicationWindow');
 		}
 	}
 	// new Window().open();

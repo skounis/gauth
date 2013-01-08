@@ -1,5 +1,5 @@
 function GoogleAPIs() {
-	this.useinfo = function(access_token, callback){
+	this.userinfo = function(access_token, callback){
 		var xhr = Ti.Network.createHTTPClient();
 		var url = 'https://www.googleapis.com/oauth2/v2/userinfo?access_token=' + access_token;
 
@@ -8,8 +8,9 @@ function GoogleAPIs() {
 		xhr.open('GET', url);
 		xhr.onload = function() {
 			Ti.API.log("onload response: " + xhr.responseText);
+			
+			var response = JSON.parse(xhr.responseText);
 			/*
-			var response = JSON.parse(xhr1.responseText);
 			Ti.API.log("Access token ....: " + response.access_token);
 			Ti.API.log("Token type ......: " + response.token_type);
 			Ti.API.log("Expires in ......: " + response.expires_in);

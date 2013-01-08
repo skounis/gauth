@@ -20,10 +20,14 @@ function WebWindow(userCode, verificationUrl) {
 	//construct UI
 	var label = Ti.UI.createLabel({
 		text:"Login to your Google Account. Use the above 'code' in order to authorize this application. When finish select 'Done'",
+		textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
 		top: 0,
 		width: '100%',
-		height: 68
-	})
+		height: 68,
+		shadowColor: '#ffffff',
+		shadowOffset: {x:0,y:1},
+		font:{fontSize:14}
+	});
 	
 	self.add(label);
 
