@@ -6,11 +6,24 @@ function WebWindow(userCode, verificationUrl) {
 		backgroundColor:'#dfdfdf'
 	});
 	
-	var donebb = Titanium.UI.createButtonBar({
-		labels:['Done'],
+	// var donebb = Titanium.UI.createButtonBar({
+		// labels:['Done','Cancel'],
+		// height:40,
+		// width:145,
+		// top:160,
+		// right:10,
+		// backgroundColor:'#336699'
+	// });
+
+	var donebb = Titanium.UI.createButton({
+		title:'Done',
+		height:40,
+		width:145,
+		top:160,
+		right:10,
 		backgroundColor:'#336699'
 	});
-
+	
 	donebb.addEventListener('click', function(e){
 		self.close();
 	});
@@ -19,7 +32,7 @@ function WebWindow(userCode, verificationUrl) {
 	
 	//construct UI
 	var label = Ti.UI.createLabel({
-		text:"Login to your Google Account. Use the above 'code' in order to authorize this application. When finish select 'Done'",
+		text:"Login to your Google Account. \nUse the above 'code' in order to authorize this application. When finish select 'Done'",
 		textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
 		top: 0,
 		width: '100%',

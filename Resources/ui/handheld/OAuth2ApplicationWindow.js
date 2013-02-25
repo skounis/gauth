@@ -18,8 +18,16 @@ function OAuth2ApplicationWindow() {
 	//create component instance
 	var self = Ti.UI.createWindow({
 		title:'OAuth 2.0',
-		backgroundColor:'#ffffff'
 	});
+	
+	if (Ti.Platform.name == 'android') 
+	{
+		self.backgroundColor = '#4e5c4d';
+	}
+	else
+	{
+		self.backgroundColor = '#aebcad';
+	}
 		
 	//construct UI
 	var codeLabel = Ti.UI.createLabel({
@@ -29,7 +37,7 @@ function OAuth2ApplicationWindow() {
 		height: 34
 	})
 	
-	self.add(codeLabel);
+	// self.add(codeLabel);
 	
 	var codeField = Ti.UI.createTextField({
 		top: 34,
@@ -43,7 +51,7 @@ function OAuth2ApplicationWindow() {
 		Ti.API.log("Navigate to the verification url...")
 	})
 	
-	self.add(codeField);
+	// self.add(codeField);
 	
 	var tokenLabel = Ti.UI.createLabel({
 		text:"Token:",
@@ -52,7 +60,7 @@ function OAuth2ApplicationWindow() {
 		height: 34
 	})
 	
-	self.add(tokenLabel);
+	// self.add(tokenLabel);
 	
 	var tokenField = Ti.UI.createTextArea({
 		top: 102,
@@ -62,8 +70,30 @@ function OAuth2ApplicationWindow() {
 		textAlign: 'center'
 	})	
 	
-	self.add(tokenField);
+	// self.add(tokenField);
 	
+	
+	// create table view data object
+	var data = [
+		{title:'Click to authenticate ...', hasChild:false, header:'Application Code'},
+		{title:'', hasChild:false, header: 'Token'}
+	];
+	
+	var tableViewOptions = {
+			data:data,
+			headerTitle:'OAuth 2 - Get User Info example.',
+			footerTitle:"Wow. That is cool!",
+			backgroundColor:'transparent',
+			rowBackgroundColor:'white'
+		};
+	
+	if (Ti.Platform.osname !== 'mobileweb') {
+		tableViewOptions.style = Titanium.UI.iPhone.TableViewStyle.GROUPED;
+	}
+	
+	var tableview = Titanium.UI.createTableView(tableViewOptions);
+	
+	self.add(tableview);
 	
 	flexSpace = Titanium.UI.createButton({
 	    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
@@ -101,23 +131,47 @@ function OAuth2ApplicationWindow() {
 		oauth_info.user_code = r.user_code;
 		oauth_info.verification_url = r.verification_url;
 		codeField.value = r.user_code;
+		var data = {title:r.user_code, hasChild:false, header:'Application Code'};
+		tableview.updateRow(0,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+		data = {title:'Click to get a Token ...', hasChild:false, header:'Token'};
+		tableview.updateRow(1,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
 		openWeb();
 	}
 
 	var tokenCallback = function (r) {
-		Ti.API.log('ApplicationWidonw2 - token callback called, token: ' + r.access_token);
+		Ti.API.log('ApplicationWindow2 - token callback called, token: ' + r.access_token);
 		oauth_info.access_token = r.access_token;
 		oauth_info.token_type = r.token_type;
 		oauth_info.expires_in = r.expires_in;
 		oauth_info.refresh_token = r.refresh_token;
 		tokenField.value = r.access_token;
+		var data = {title:r.access_token, hasChild:false, header:'Token'};
+		tableview.updateRow(1,data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+		data = [
+			{title:'Click to get User info ...', header:'User Info'},
+		];
+		tableview.appendRow(data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
 	}
 	
 	var gapi = new GoogleAPIs();
 	
 	var gapiCallback = function (r) {
 		Ti.API.log('ApplicationWidonw2 - gapi callback called, user code: ' + r);
-		Ti.API.log('r.length:' + r.length)
+		Ti.API.log('r.length:' + r.length);
+		var data = [
+			{title:r.email},
+			{title:r.verified_email + ''},
+			{title:r.name},
+			{title:r.given_name},
+			{title:r.family_name},
+			{title:r.link},
+			{title:r.picture},
+			{title:r.gender},
+			{title:r.birthday,},
+			{title:r.locale}
+		];
+		tableview.deleteRow(2);
+		tableview.appendRow(data,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
 	}
 	
 	//Add behavior for UI
@@ -134,6 +188,23 @@ function OAuth2ApplicationWindow() {
 	});
 	
 	self.add(toolbar);
+	
+	//Add behavior for the Table UI
+	tableview.addEventListener('click',function(e)
+	{
+		switch(e.index)
+		{
+			case 0:
+				oa.auth(authCallback);
+				break;
+			case 1:
+				oa.token(oauth_info,tokenCallback);
+				break;	
+			case 2:
+				gapi.userinfo(oauth_info.access_token, gapiCallback);
+				break;			
+		}
+	});
 	
 	function openWeb(){
 		webWindow = new WebWindow(oauth_info.user_code, oauth_info.verification_url);
